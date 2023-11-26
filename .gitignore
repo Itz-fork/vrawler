@@ -6,6 +6,7 @@ vrawler
 *.so
 *.dylib
 *.dll
+.editorconfig
 
 # Ignore binary output folders
 bin/
