@@ -1,4 +1,4 @@
-module main
+module vrawler
 
 import regex
 import net.html
