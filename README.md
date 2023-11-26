@@ -1,7 +1,7 @@
 # Vrawler
 Some helper functions that I use to scrape websites
 
-## Get element by css selectors
+### Get element(s) by css selectors
 ```html
 <html lang="en">
 <head>
