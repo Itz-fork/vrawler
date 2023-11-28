@@ -4,26 +4,18 @@ import regex
 import net.html
 
 pub fn element_from_selectors(hdoc string, selectors string) []&html.Tag {
-	mut parsed_doc := html.parse(hdoc)
+	mut parsed_doc := html.parse(hdoc).get_root()
 	list_of_el := selectors.replace(' >', '').split(' ')
 	mut res := []&html.Tag{}
-	// Return first element if select only contains 1 element (Ex: "div")
-	if list_of_el.len <= 1 {
-		res = parsed_doc.get_tags(name: list_of_el[0])
-		return res
-	}
+	mut resval := parsed_doc
 	// Iter through elements to find the element that selector points to
 	mut re_nth := regex.regex_opt(r'.+\:nth-child\(\d\)') or { panic(err) }
 	for i, el in list_of_el {
 		if el.starts_with('#') {
-			// Tags
-			if res.len == 0 {
-				res << parsed_doc.get_tags_by_attribute_value('id', el.split('#')[1])
-			} else {
-				res[0] = res[0].get_tags_by_attribute_value('id', el.split('#')[1])[0]
-			}
+			// elements with id
+			resval = resval.get_tags_by_attribute_value('id', el.split('#')[1])[0]
 		} else if re_nth.matches_string(el) {
-			// nth child
+			// elements with nth child
 			// Split the string to ['div', 'nth-child(1)']
 			spl_e := el.split(':')
 			mut re_dig := regex.regex_opt(r'\d') or { panic(err) }
@@ -32,24 +24,20 @@ pub fn element_from_selectors(hdoc string, selectors string) []&html.Tag {
 			if st < 0 {
 				continue
 			}
-			// Update first element with corresponding element
 			chl_in := spl_e[1][st..en].i8() - 1
-			if res.len == 0 {
-				// Push n th found child tag to res list
-				res << parsed_doc.get_tags(name: spl_e[0])[chl_in]
-			} else {
-				res[0] = res[0].get_tags(spl_e[0])[chl_in]
-			}
+			resval = resval.get_tags(spl_e[0])[chl_in]
 		} else {
 			// Just elements
 			if i + 1 == list_of_el.len {
-				res = res[0].get_tags(el)
-			} else if res.len == 0 {
-				// Push first found child tag to res list
-				res << parsed_doc.get_tags(name: el)[0]
+				return resval.get_tags(el)
 			} else {
-				res[0] = res[0].get_tags(el)[0]
+				resval = resval.get_tags(el)[0]
 			}
+		}
+		if res.len == 0 {
+			res << resval
+		} else {
+			res[0] = resval
 		}
 	}
 	return res
