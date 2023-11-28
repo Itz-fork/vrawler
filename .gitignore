@@ -7,7 +7,7 @@ vrawler
 *.dylib
 *.dll
 .editorconfig
-main.v
+checks.v
 
 # Ignore binary output folders
 bin/
