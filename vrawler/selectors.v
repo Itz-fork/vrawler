@@ -3,7 +3,7 @@ module vrawler
 import regex
 import net.html
 
-pub fn element_from_selectors(hdoc string, selectors string) []&html.Tag {
+pub fn from_selector(hdoc string, selectors string) []&html.Tag {
 	mut parsed_doc := html.parse(hdoc).get_root()
 	list_of_el := selectors.replace(' ', '').split('>')
 	mut res := []&html.Tag{}
