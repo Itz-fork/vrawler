@@ -15,35 +15,29 @@ Used to retrive html elements using css selectors
 ```html
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test file</title>
 </head>
 <body>
-    <div>
-        <div>
-            <a href="https://www.google.com/">Google</a>
-            <a href="https://vlang.io/"><span>V</span> lang</a>
-        </div>
+    <div id="mydiv">
+        <a href="https://www.google.com/">Google</a>
+        <a href="https://vlang.io/"><span>V</span> lang</a>
     </div>
 </body>
 </html>
 ```
 
-To select `span` elemet,
 ```v
-above_html_as_str := '<html>...</html>'
-x := element_from_selectors(above_html_as_str, "div > a:nth-child(2) > span")
-println(x)
+import vrawler
 
-// Out
+fn main() {
+    // Suppose this index.html == above html
+    html_str := read_file('/home/scraped/mysite/index.html')
+    spn := vrawler.from_selector(html_str, '#mydiv > a:nth-child(2) > span')
+    println(spn)
+}
+
+// stdout
 // [<span>V</span>]
 ```
 
-If the html has more multiple `span` tags in side the `a` tag, it'll return a list of elements (`[]&Tag`)
-
-```v
-// Out
-// [<span>V</span>, <span>Another V</span>]
-```
 </details>
