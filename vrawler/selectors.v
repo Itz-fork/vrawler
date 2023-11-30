@@ -5,7 +5,7 @@ import net.html
 
 pub fn element_from_selectors(hdoc string, selectors string) []&html.Tag {
 	mut parsed_doc := html.parse(hdoc).get_root()
-	list_of_el := selectors.replace(' >', '').split(' ')
+	list_of_el := selectors.replace(' ', '').split('>')
 	mut res := []&html.Tag{}
 	mut resval := parsed_doc
 	// Iter through elements to find the element that selector points to
